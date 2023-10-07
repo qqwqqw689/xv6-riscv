@@ -65,6 +65,7 @@ int
 cpuid()
 {
   int id = r_tp();
+  // each CPU's hartid is stored in that CPU's tp register while in kernel.
   return id;
 }
 

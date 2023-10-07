@@ -90,7 +90,7 @@ push_off(void)
 {
   int old = intr_get();
 
-  intr_off();
+  intr_off(); // disable device interrupts
   if(mycpu()->noff == 0)
     mycpu()->intena = old;
   mycpu()->noff += 1;
