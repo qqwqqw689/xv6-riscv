@@ -31,13 +31,20 @@ acquire(struct spinlock *lk)
   //   amoswap.w.aq a5, a5, (s1)
   while(__sync_lock_test_and_set(&lk->locked, 1) != 0)
     ;
+  // type __sync_lock_test_and_set (type *ptr, type value, ...)
+  // an atomic exchange operation.
+  // It writes value into *ptr, and returns the previous contents of *ptr.
 
   // Tell the C compiler and the processor to not move loads or stores
   // past this point, to ensure that the critical section's memory
   // references happen strictly after the lock is acquired.
   // On RISC-V, this emits a fence instruction.
   __sync_synchronize();
-
+  //  __sync_synchronize (...)
+  // This builtin issues a full memory barrier.
+  // Memory barrier:  a class of instructions which cause a central processing unit (CPU) to enforce an ordering constraint 
+  // on memory operations issued before and after the barrier instruction.
+  
   // Record info about lock acquisition for holding() and debugging.
   lk->cpu = mycpu();
 }
@@ -90,7 +97,7 @@ push_off(void)
 {
   int old = intr_get();
 
-  intr_off(); // disable device interrupts
+  intr_off();  // disable device interrupts
   if(mycpu()->noff == 0)
     mycpu()->intena = old;
   mycpu()->noff += 1;
